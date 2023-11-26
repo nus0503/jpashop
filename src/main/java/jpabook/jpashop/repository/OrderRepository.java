@@ -110,4 +110,12 @@ public class OrderRepository {
         // 1 : 다 join fetch에서는 페이징을 하면 절대 안된다. 결과값이 나온다고해도 그건 db결과가 아닌 애플리케이션 메모리상에서 만든 결과이기에 리소스 부하가 걸린다. .setFirstResult().setMaxResults()
         //또한 컬렉션 페치 조인은 1개만 사용해라. 컬렉션 둘 이상에 페치 조인을 사용하면 안된다. 데이터가 부정합하게 조회될 수 있다. ex) Team(1) : Member(N) : Order(N)
     }
+
+    public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+        return em.createQuery("select o from Order o join fetch o.member m join fetch o.delivery d", Order.class)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
+
+    }
 }
